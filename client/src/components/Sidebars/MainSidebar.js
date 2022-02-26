@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, PureComponent } from "react";
 import { NavLink } from "react-router-dom";
 
-export default class MainSidebar extends Component {
+export default class MainSidebar extends PureComponent {
   render() {
+  console.log("MainSidebar");
+
     return (
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
         {/* Brand Logo */}
