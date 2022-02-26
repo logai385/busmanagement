@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const authRouter = require("./routes/auth");
 const postRouter = require("./routes/post");
+const cors = require("cors");
 const connectDB = async () => {
   try {
     await mongoose.connect(
@@ -16,6 +17,7 @@ const connectDB = async () => {
 connectDB();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/posts", postRouter);
