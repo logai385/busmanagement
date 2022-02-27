@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import Transporters from "./components/Test/Transporters";
 import TransporterCU from "./components/Test/TransporterCU";
+import SignDocument from "./components/Test/SignDocument";
 
 function App() {
   return (
@@ -28,8 +29,9 @@ function App() {
       </Router> */}
       <Router>
         <Switch>
-          <Route exact path="/" component={Transporters} />
-          <Route exact path="/transporter/:action"  component={TransporterCU} />
+          <Route exact path="/" component={SignDocument} />
+          <Route exact path="/documents" component={SignDocument} />
+          <Route exact path="/documents/add"  component={TransporterCU} />
         </Switch>
       </Router>
       

@@ -3,9 +3,10 @@ import createSagaMiddleware from 'redux-saga';
 import { rootSaga } from './Saga/rootSaga';
 import TransporterReducer from './Reducers/TransporterReducer';
 import LineReducer from './Reducers/LineReducer';
+import DocumentReducer from './Reducers/DocumentReducer';
 const sagaMiddleware = createSagaMiddleware(rootSaga);
 const rootReducer = combineReducers({
-    TransporterReducer,LineReducer
+    TransporterReducer,LineReducer,DocumentReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));

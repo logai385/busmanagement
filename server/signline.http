@@ -1,0 +1,12 @@
+GET http://localhost:5000/api/sign/documents
+
+
+###
+POST http://localhost:5000/api/sign/documents
+Content-Type: application/json
+
+{
+    "dateSign":"2022-02-19T14:15:49.745+00:00",
+    "transporter":"621a3d2535133eceeef5d241",
+    "documentImg":"adfdf1"
+}

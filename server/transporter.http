@@ -6,8 +6,8 @@ POST http://localhost:5000/api/qlnv/transporters
 Content-Type: application/json
 
 {
-    "plate": "131a151",
-    "mainLines":["6219a97032ea6aa53431db48","6219be2c770fd22f14521c70"],
+    "plate": "13151",
+    "mainLines":["6219a97032ea6aa53431db48","6319be2c770fd22f14521c71"],
     "minorLines":["6219a97032ea6aa53431db48","6219be2c770fd22f14521c70"]
 }
 

@@ -6,11 +6,13 @@ const postRouter = require("./routes/post");
 const cors = require("cors");
 const lineRoute = require("./routes/line");
 const transporterRoute = require("./routes/transporter");
-
+const signlineRoute = require("./routes/signline");
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.lxuok.mongodb.net/mearn-learnit?retryWrites=true&w=majority`
+      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.lxuok.mongodb.net/mearn-learnit?retryWrites=true&w=majority`,{
+        useNewUrlParser: true,
+      }
     );
   } catch (err) {
     console.error(err.message);
@@ -26,6 +28,8 @@ app.use("/api/auth", authRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/qlnv/lines", lineRoute);
 app.use("/api/qlnv/transporters", transporterRoute);
+app.use("/api/sign/", signlineRoute);
+
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
