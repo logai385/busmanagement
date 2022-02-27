@@ -1,0 +1,3 @@
+export const SET_LINE_LIST = 'SET_LINE_LIST';
+export const GET_LINE_LIST_API = 'GET_LINE_LIST_API';
+export const DELETE_LINE_API = 'DELETE_LINE_API';

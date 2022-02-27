@@ -1,106 +1,98 @@
 const express = require("express");
 const router = express.Router();
-const line = require("../model/Line");
 const transporter = require("../model/Transporter");
-const transporterUnit = require("../model/TransporterUnit");
-const transportDocument = require("../model/TransportDocument");
-
-// @route GET api/qlnv/lines
-// @desc Get all lines
+// @route GET api/qlnv/transporters
+// @desc Get all transporters
 // @access Public
-
-router.get("/lines", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    // get all line
-    const lines = await line.find();
-    res.json({ success: true, lines });
+    // get all transporters
+    const transporters = await transporter
+      .find()
+      .populate(["mainLines", "minorLines"]);
+    res.json({ success: true, transporters });
   } catch (err) {
     console.error(err.message);
     return res.status(500).json({ success: false, message: "server error" });
   }
 });
-
-// @ route POST api/qlnv/lines
-// @ desc Create a new line
-// @ access Public
-router.post("/lines", async (req, res) => {
+// @route POST api/qlnv/transporters
+// @desc Create a new transporter
+// @access Public
+router.post("/", async (req, res) => {
   try {
+    const { plate, mainLines, minorLines } = req.body;
     // Simple validation
-    const { lineNumber, description, status } = req.body;
-    if (!lineNumber || lineNumber < 1) {
+    if (!plate) {
       return res
         .status(400)
-        .json({ success: false, message: "lineNumber must be greater than 0" });
+        .json({ success: false, message: "plate must not be empty" });
     }
-    // Check if lineNumber already exists
-    const lineExists = await line.findOne({ lineNumber });
-    if (lineExists) {
+    const existTransporter = await transporter.findOne({ plate });
+    if (existTransporter) {
       return res
         .status(400)
-        .json({ success: false, message: "lineNumber already exists" });
+        .json({ success: false, message: "plate already exists" });
     }
-    // Create new line
-    const newLine = new line({
-      lineNumber: lineNumber,
-      description: description,
-      status: status,
+    // Create new transporter
+    const newTransporter = new transporter({
+      plate: plate,
+      mainLines: mainLines,
+      minorLines: minorLines,
     });
-    await newLine.save();
-    res.json({ success: true, message: "line created", newLine });
+    await newTransporter.save();
+    res.json({ success: true, message: "transporter created", newTransporter });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     return res.status(500).json({ success: false, message: "server error" });
   }
 });
 
-// @route PUT api/qlnv/line
-// @desc Update a transporter
-// @access Public
-router.put("/lines", async (req, res) => {
+//@route Delete api/qlnv/transporters/plate/:plate
+//@desc Delete a transporter
+//@access Public
+router.delete("/plate/:plate", async (req, res) => {
   try {
-    const { id, lineNumber, description, status } = req.body;
-    //simple validation
-    if (!lineNumber || lineNumber < 1) {
-      return res
-        .status(400)
-        .json({ success: false, message: "lineNumber must be greater than 0" });
-    }
-    const lineExists = await line.findOne({ lineNumber: lineNumber });
-    if(lineExists) {
-        return res.status(400).json({ success: false, message: "lineNumber already exists" });
-    }
-    // Check if lineNumber already exists
-    let updateLine = {
-      lineNumber: lineNumber,
-      description: description,
-      status: status,
-    };
-    updateLine = await line.findOneAndUpdate({ _id: id }, updateLine, {
-      new: true,
+
+    const deleteTransporter = await transporter.findOneAndDelete({
+      plate: req.params.plate,
     });
-    if (!updateLine) {
+    if (!deleteTransporter) {
       return res
-        .status(400)
-        .json({ success: false, message: "line not found" });
+        .status(404)
+        .json({ success: false, message: "transporter not found" });
     }
-    return res.json({ success: true, message: "line updated", updateLine });
+    return res.json({ success: true, message: "transporter deleted" });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     return res.status(500).json({ success: false, message: "server error" });
   }
 });
-// @route DELETE api/qlnv/line
-// @desc Delete a line
-// @access Public
-router.delete("/lines/:lineNumber", async (req, res) => {
-    try {
-     const params = req.params;   
-     console.log(params);
-    } catch (error) {
-        console.log(error.message);
+//@route PUT api/qlnv/transporters
+//@desc Update a transporter
+//@access Public
+router.put("/", async (req, res) => {
+    try{
+        const {id, plate, mainLines, minorLines } = req.body;
+        //simple validation
+        if(!plate){
+            return res.status(400).json({success: false, message: "plate must not be empty"});
+        }
+        const existTransporter = await transporter.findOne({plate});
+        if(existTransporter && existTransporter.id !== id){
+            return res.status(400).json({success: false, message: "plate already exists"});
+        }
+        let updateTransporter={
+            plate: plate,
+            mainLines: mainLines,
+            minorLines: minorLines,
+        }
+        updateTransporter = await transporter.findOneAndUpdate({_id: id}, updateTransporter, {new: true});
+        return res.json({ success: true, message: "transporter updated", updateTransporter });
+    }catch(error){
+        console.error(error.message);
         return res.status(500).json({ success: false, message: "server error" });
     }
-        
-    
 });
+
 module.exports = router;

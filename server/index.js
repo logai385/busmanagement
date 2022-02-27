@@ -4,7 +4,8 @@ require("dotenv").config();
 const authRouter = require("./routes/auth");
 const postRouter = require("./routes/post");
 const cors = require("cors");
-const transporterRouter = require("./routes/transporter");
+const lineRoute = require("./routes/line");
+const transporterRoute = require("./routes/transporter");
 
 const connectDB = async () => {
   try {
@@ -23,7 +24,8 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/posts", postRouter);
-app.use("/api/qlnv", transporterRouter);
+app.use("/api/qlnv/lines", lineRoute);
+app.use("/api/qlnv/transporters", transporterRoute);
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

@@ -8,11 +8,13 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
+import Transporters from "./components/Test/Transporters";
+import TransporterCU from "./components/Test/TransporterCU";
 
 function App() {
   return (
     <div className="App">
-      <Router>
+      {/* <Router>
         <Navbar />
         <MainSidebar />
         <div>
@@ -23,7 +25,14 @@ function App() {
           </Switch>
           <Footer />
         </div>
+      </Router> */}
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Transporters} />
+          <Route exact path="/transporter/:action"  component={TransporterCU} />
+        </Switch>
       </Router>
+      
     </div>
   );
 }

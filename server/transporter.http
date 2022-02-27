@@ -1,0 +1,29 @@
+GET http://localhost:5000/api/qlnv/transporters    
+
+
+###
+POST http://localhost:5000/api/qlnv/transporters    
+Content-Type: application/json
+
+{
+    "plate": "131a151",
+    "mainLines":["6219a97032ea6aa53431db48","6219be2c770fd22f14521c70"],
+    "minorLines":["6219a97032ea6aa53431db48","6219be2c770fd22f14521c70"]
+}
+
+
+###
+DELETE  http://localhost:5000/api/qlnv/transporters/plate/131151
+
+
+###
+PUT http://localhost:5000/api/qlnv/transporters    
+Content-Type: application/json
+
+{
+    "id":"6219e45892eba117af421267",
+    "plate": "13151A",
+    "mainLines":["6219a97032ea6aa53431db48"],
+    "minorLines":["6219a97032ea6aa53431db48","6219be2c770fd22f14521c70"]
+}
+
