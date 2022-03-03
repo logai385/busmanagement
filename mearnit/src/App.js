@@ -1,17 +1,17 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
-import Landing from "./pages/Landing/Landing";
+import Landing from "./pages/Layout/Landing";
 import Auth from "./pages/Auth/Auth";
 import AuthContextProvider from "./services/AuthContext";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import ProtectRoute from "./pages/ProtectRoute/ProtectRoute";
 function App() {
   return (
     <AuthContextProvider>
       <Router>
         <Switch>
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/landing" component={Landing} />
-          <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/" component={Landing} />          
+          <ProtectRoute exact path="/dashboard" component={Dashboard} />
 
           <Route
             exact

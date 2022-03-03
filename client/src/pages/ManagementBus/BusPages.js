@@ -1,6 +1,35 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import 'jquery/dist/jquery.min.js';
+import "datatables.net-dt/js/dataTables.dataTables"
+import "datatables.net-dt/css/jquery.dataTables.min.css"
+import $ from "jquery";
 export default function BusPages() {
+  useEffect(() => {
+    $(document).ready(function () {
+      $("#example1")
+        .DataTable({
+          responsive: true,
+          lengthChange: false,
+          autoWidth: false,
+          buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        })
+        .buttons()
+        .container()
+        .appendTo("#example1_wrapper .col-md-6:eq(0)");
+      $("#example2").DataTable({
+        paging: true,
+        lengthChange: false,
+        searching: false,
+        ordering: true,
+        info: true,
+        autoWidth: false,
+        responsive: true,
+      });
+    });
+
+    return () => {};
+  }, []);
+
   return (
     <div className="content-wrapper">
       {/* Content Header (Page header) */}
@@ -27,8 +56,6 @@ export default function BusPages() {
         <div className="container-fluid">
           <div className="row">
             <div className="col-12">
-              
-              
               <div className="card">
                 <div className="card-header">
                   <h3 className="card-title">
@@ -475,7 +502,6 @@ export default function BusPages() {
         {/* /.container-fluid */}
       </section>
       {/* /.content */}
-    
     </div>
   );
 }

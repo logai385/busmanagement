@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import LogIn from "./LogIn";
 import Register from "./Register";
-
-const Auth = (props) => {
-  let { authRoute } = props;
+import { AuthContext } from "../../services/AuthContext";
+import { Redirect } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
+const Auth = ({ authRoute }) => {
+  const {
+    authState: { authLoading, isAuthenticated },
+  } = useContext(AuthContext);
+  
   let body;
-  body = <>{authRoute === "login" ? <LogIn /> : <Register />};</>;
+  if (authLoading) {
+    body = (
+      <div className="d-flex justify-content-center">
+        <Spinner animation="border" variant="info" />
+        
+      </div>
+    );
+  } else if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  } else body = <>{authRoute === "login" ? <LogIn /> : <Register />};</>;
   return (
     <>
       <div className="landing">

@@ -7,6 +7,7 @@ const cors = require("cors");
 const lineRoute = require("./routes/line");
 const transporterRoute = require("./routes/transporter");
 const signlineRoute = require("./routes/signline");
+
 const connectDB = async () => {
   try {
     await mongoose.connect(

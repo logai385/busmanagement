@@ -1,10 +1,10 @@
 import Axios from 'axios';
-import { DOMAIN } from '../util/Constants/SystemSettings';
+import { API_URL } from '../util/Constants/SystemSettings';
 class lineSerices{
     constructor(){}
     getLineList=()=>{
         return Axios({
-            url: `${DOMAIN}/api/qlnv/lines`,
+            url: `${API_URL}/qlnv/lines`,
             method: 'GET',
         })
     }    

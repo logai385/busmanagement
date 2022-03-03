@@ -1,10 +1,10 @@
 import Axios from 'axios';
-import { DOMAIN } from '../util/Constants/SystemSettings';
+import { API_URL } from '../util/Constants/SystemSettings';
 class documentServices{
     constructor(){}
     getDocumentList=()=>{
         return Axios({
-            url: `${DOMAIN}/api/sign/documents`,
+            url: `${API_URL}/sign/documents`,
             method: 'GET',
         })
     }
@@ -14,13 +14,14 @@ class documentServices{
     //         method: 'GET',
     //     })
     // }
-    // addDocument=(data)=>{
-    //     return Axios({
-    //         url: `${DOMAIN}/api/qlnv/documents`,
-    //         method: 'POST',
-    //         data: data,
-    //     })
-    // }
+    addDocument=(data)=>{
+        // console.log(data);
+        return Axios({
+            url: `${API_URL}/sign/documents`,
+            method: 'POST',
+            data: data,
+        })
+    }
     // updateDocument=(id,data)=>{
     //     return Axios({
     //         url: `${DOMAIN}/api/qlnv/documents/${id}`,
