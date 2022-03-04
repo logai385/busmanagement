@@ -18,11 +18,11 @@ const upload = multer({ storage: storage });
 
 router.get("/documents", async (req, res) => {
   try {
-    const documents = await TransportDocument.find().populate(["transporter"]);
+    const documentList = await TransportDocument.find().populate(["transporter"]);
     res.json({
       success: true,
-      count: documents.length,
-      data: documents,
+      count: documentList.length,
+      documentList,
     });
   } catch (err) {
     console.error(err.message);
@@ -53,7 +53,7 @@ router.post("/documents", upload.single("documentImg") ,async (req, res) => {
       documentImg,
     });
     await newDocument.save();
-    res.json({ success: true, message: "Document created", newDocument });
+    res.json({ success: true, message: "Document created",document: newDocument });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

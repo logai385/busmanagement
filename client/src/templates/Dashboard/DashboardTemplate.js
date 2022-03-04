@@ -11,7 +11,7 @@ const DashboardTemplate = (props) => {
     authState: { authLoading, isAuthenticated },
   } = useContext(AuthContext);
 
-  if (authLoading) {
+  if (authLoading) {    
     return (
       <div className="spinner-container">
         <Spinner animation="border" variant="info" />

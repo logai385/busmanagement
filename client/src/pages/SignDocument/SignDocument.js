@@ -1,54 +1,81 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { GET_DOCUMENT_LIST_API } from "../../redux/Constants/DocumentConst";
-import MUIDataTable from "mui-datatables";
-export default function SignDocument() {
-  const dispatch = useDispatch();
 
+import { getDocumentsAct } from "../../redux/Actions/DocumentAction";
+import { Table, Tag } from "antd";
+export default function SignDocument() {
   const documentList = useSelector(
     (state) => state.DocumentReducer.documentList
   );
-  const getDocumentList = () => {
-    dispatch({
-      type: GET_DOCUMENT_LIST_API,
-    });
-  };
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
     getDocumentList();
 
     return () => {};
   }, []);
+
+  const getDocumentList = () => {
+    dispatch(getDocumentsAct());
+  };
+
   const formatDate = (strDate) => {
-    let newDate = new Date(strDate).toLocaleDateString();
+    let newDate = new Date(strDate).toLocaleDateString("vi-GB");
     return newDate;
   };
-  const renderDocumentList = () => {
-    const columns = ["#", "	Ngày", "Biển Số", "File","action"];
 
-    const data = documentList.map((document, index) => {
-      return [
-        index + 1,
-        formatDate(document.dateSign),
-        document.transporter.plate,
-        <img
-          className="img-thumbnail"
-          src={`./uploads/${document.documentImg}`}
-          style={{ width: "40px" }}
-          alt={document.transporter.plate}
-        ></img>,
-        <button className="btn-sm btn-outline-danger"><i class="fa fa-times"></i></button>
-      ];
+  const renderDocumentList = () => {
+    const columns = [
+      {
+        title: "#",
+        dataIndex: "#",
+        key: "#",
+      },
+      {
+        title: "Ngày",
+        dataIndex: "Ngày",
+        key: "Ngày",
+      },
+      {
+        title: "Biển Số",
+        dataIndex: "Biển Số",
+        key: "Biển Số",
+        render: (plate) => (
+          <Tag color="geekblue" key={plate}>
+            {plate}
+          </Tag>
+        ),
+      },
+      {
+        title: "File",
+        dataIndex: "File",
+        key: "File",
+        render: (text) => (
+          <a
+            href={`./uploads/${text}`}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            link
+          </a>
+        ),
+      },
+    ];
+
+    const dataSource = documentList.map((document, index) => {
+      return {
+        "#": index + 1,
+        Ngày: formatDate(document.dateSign),
+        "Biển Số": document.transporter.plate,
+        File: document.documentImg,
+      };
     });
-    const options = {
-      selectableRows: false,
-      filter: false,
-      viewColumns: false,
-      print: false,
-      responsive: 'scrollMaxHeight',
-    };
-    return <MUIDataTable data={data} columns={columns} options={options} />;
+
+    return <Table dataSource={dataSource} columns={columns} />;
   };
+
   return (
     <>
       <div className="content-wrapper">
@@ -61,7 +88,6 @@ export default function SignDocument() {
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
-             
                   <li className="breadcrumb-item active">Quản lý tài liệu</li>
                   <li className="breadcrumb-item">
                     <Link className="btn-sm btn-primary" to="/documents/add">

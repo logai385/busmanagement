@@ -5,11 +5,11 @@ const initialState = {
 };
 
 const DocumentReducer = (state = initialState, action) => {
-  switch (action.type) {
+  const {type, payload}=action;
+  switch (type) {
     case SET_DOCUMENT_LIST:
-      state.documentList = action.documentList;
+      state.documentList = payload;
       return { ...state };
-
     default:
       return state;
   }

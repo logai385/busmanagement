@@ -4,27 +4,38 @@ import { DatePicker, Select, Input } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { GET_TRANSPORTER_LIST_API } from "../../redux/Constants/TransporterConst";
 import { ADD_DOCUMENT_API } from "../../redux/Constants/DocumentConst";
+import _ from "lodash";
 const { Option } = Select;
 export default function AddSignDocument() {
-  const [document, setDocument] = useState({
+  const [signDocument, setSignDocument] = useState({
     dateSign: "",
     transporter: "",
-    documentImg: "134",
+    lineList: [],
+    documentImg: "",
   });
   const dispatch = useDispatch();
   const transporterList = useSelector(
     (state) => state.TransporterReducer.transporterList
   );
   const handleDateChange = (date, dateString) => {
-    setDocument({ ...document, dateSign: dateString });
+    setSignDocument({ ...signDocument, dateSign: dateString });
   };
   const handleSelectChange = (value) => {
-    setDocument({ ...document, transporter: value });
+    let transporter = transporterList.filter(
+      (transporter) => transporter._id === value
+    );
+    if (transporter.length > 0) {
+      transporter = transporter[0];
+    }  
+    let lineList = [...transporter.mainLines, ...transporter.minorLines];
+    lineList = _.uniqBy(lineList, "_id");
+
+    setSignDocument({ ...signDocument, transporter: value, lineList: lineList });
   };
   const handleChangeFile = (e) => {
     const file = e.target.files[0];
 
-    setDocument({ ...document, documentImg: file });
+    setSignDocument({ ...signDocument, documentImg: file });
   };
   const getTransporterList = () => {
     dispatch({
@@ -37,6 +48,26 @@ export default function AddSignDocument() {
     return () => {};
   }, []);
 
+  const renderLineList = () => {
+
+    const defOption = signDocument.lineList.map((line, index) => {
+      return (
+        <Option key={index} value={line._id}>
+          {line.lineNumber}
+        </Option>
+      );
+    });
+    return (
+      <Select
+        name="line"
+        size="large"      
+        style={{ width: "100%" }}                
+        defaultValue={signDocument.lineList[0]?._id}
+      >
+        {defOption}
+      </Select>
+    );
+  };
   const renderTransorter = () => {
     const defOption = transporterList.map((transporter) => {
       return (
@@ -64,9 +95,9 @@ export default function AddSignDocument() {
     //     data: document,
     // })
     const formData = new FormData();
-    formData.append("dateSign", document.dateSign);
-    formData.append("transporter", document.transporter);
-    formData.append("documentImg", document.documentImg);
+    formData.append("dateSign", signDocument.dateSign);
+    formData.append("transporter", signDocument.transporter);
+    formData.append("documentImg", signDocument.documentImg);
     dispatch({
       type: ADD_DOCUMENT_API,
       data: formData,
@@ -80,16 +111,19 @@ export default function AddSignDocument() {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1><Link to='/documents'><i className="fa fa-angle-double-left"></i></Link>  Quản lý tài liệu</h1>
+                <h1>
+                  <Link to="/documents">
+                    <i className="fa fa-angle-double-left"></i>
+                  </Link>{" "}
+                  Quản lý tài liệu
+                </h1>
               </div>
-             
             </div>
           </div>
           {/* /.container-fluid */}
         </section>
         {/* Main content */}
         <section className="content signDocument">
-        
           <div className="card card-success">
             <div className="card-header">
               <h3 className="card-title">Đăng ký Xe</h3>
@@ -114,6 +148,11 @@ export default function AddSignDocument() {
                   <label htmlFor="inputAddress ">Số Xe</label>
 
                   {renderTransorter()}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="inputAddress ">Tuyến</label>
+
+                  {renderLineList()}
                 </div>
                 <div className="form-group">
                   <label htmlFor="inputAddress">File </label>
